@@ -61,7 +61,8 @@ const anecdoteReducer = (state = initialState, action) => {
       return { ...state, anecdotes: anecdotesToReturn }
     case 'NEW_ANECDOTE':
       // add action.payload to state.anecdotes
-      return state.anecdotes.concat(action.payload)
+      anecdotesToReturn = state.anecdotes.concat(action.payload)
+      return { ...state, anecdotes: anecdotesToReturn }
     default:
       return state
   }
