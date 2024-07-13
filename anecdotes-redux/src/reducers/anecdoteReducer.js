@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getId } from '../services/id'
+import anecdoteService from '../services/anecdotes'
 
 const anecdotesSlice = createSlice({
   name: 'anecdotes',
@@ -12,9 +12,6 @@ const anecdotesSlice = createSlice({
         anecdoteToVote.votes += 1
       }
     },
-    createAnecdote(state, action) {
-      state.push(action.payload)
-    },
     appendAnecdote(state, action) {
       state.push(action.payload)
     },
@@ -24,54 +21,20 @@ const anecdotesSlice = createSlice({
   }
 })
 
-export const { voteAnecdote, createAnecdote, appendAnecdote, setAnecdotes } = anecdotesSlice.actions
+export const { voteAnecdote, appendAnecdote, setAnecdotes } = anecdotesSlice.actions
+
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
+
+export const createAnecdote = content => {
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch(appendAnecdote(newAnecdote))
+  }
+}
 
 export default anecdotesSlice.reducer
-
-// export const increaseVote = (id) => {
-//   return {
-//     type: 'VOTE',
-//     payload: { id }
-//   }
-// }
-
-// export const createAnecdote = (content) => {
-//   return {
-//     type: 'NEW_ANECDOTE',
-//     payload: {
-//       content,
-//       id: getId(),
-//       votes: 0
-//     }
-//   }
-// }
-
-// const anecdoteReducer = (state = initialState, action) => {
-//   console.log('state now: ', state)
-//   console.log('action', action)
-
-//   let id = null
-//   let anecdoteToVote = null
-//   let votedAnecdote = null
-//   let anecdotesToReturn = null
-
-//   switch (action.type) {
-//     case 'VOTE':
-//       id = action.payload.id
-//       anecdoteToVote = state.find(a => a.id === id)
-//       votedAnecdote = {
-//         ...anecdoteToVote,
-//         votes: anecdoteToVote.votes + 1
-//       }
-//       anecdotesToReturn = state.map(a => a.id !== id ? a : votedAnecdote)
-//       return anecdotesToReturn
-//     case 'NEW_ANECDOTE':
-//       // add action.payload to state.anecdotes
-//       anecdotesToReturn = state.anecdotes.concat(action.payload)
-//       return anecdotesToReturn
-//     default:
-//       return state
-//   }
-// }
-
-// export default anecdoteReducer
