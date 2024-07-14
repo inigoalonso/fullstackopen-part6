@@ -4,16 +4,6 @@ import { Provider } from 'react-redux'
 import store from './store/store'
 import App from './App'
 
-import anecdoteService from './services/anecdotes'
-import anecdoteReducer, { setAnecdotes } from './reducers/anecdoteReducer'
-
-
-// store.subscribe(() => console.log(store.getState()))
-
-// anecdoteService.getAll().then(anecdotes =>
-//   store.dispatch(setAnecdotes(anecdotes))
-// )
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
