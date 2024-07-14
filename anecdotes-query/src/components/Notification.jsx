@@ -1,4 +1,11 @@
+import { useContext, useEffect } from 'react'
+import { useNotificationDispatch, useNotificationValue } from '../NotificationContext'
+
 const Notification = () => {
+
+  const notification = useNotificationValue()
+  const dispatch = useNotificationDispatch()
+
   const style = {
     border: 'solid',
     padding: 10,
@@ -6,13 +13,24 @@ const Notification = () => {
     marginBottom: 5
   }
   
-  if (true) return null
+  useEffect(() => {
+    if (notification) {
+      setTimeout(() => {
+        dispatch({ type: 'CLEAR_NOTIFICATION' });
+      }, 5000);
+    }
+  }, [notification, dispatch])
 
-  return (
-    <div style={style}>
-      
-    </div>
-  )
+  if (notification) {
+    return (
+      <div style={style}>
+        {notification}
+        {/* <span style={{ float: 'right' }} onClick={() => dispatch({ type: 'CLEAR_NOTIFICATION' })}>x</span> */}
+      </div>
+    )
+  } else {
+    return null
+  }
 }
 
 export default Notification
