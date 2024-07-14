@@ -7,11 +7,16 @@ import Notification from './components/Notification'
 const App = () => {
   const queryClient = useQueryClient()
 
+  const newVoteMutation = useMutation({
+    mutationFn: voteAnecdote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    },
+  })
+
   const handleVote = (anecdote) => {
     console.log('vote')
-    voteAnecdote(anecdote).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
-    })
+    newVoteMutation.mutate(anecdote)
   }
 
   const result = useQuery({
